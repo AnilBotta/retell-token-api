@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const response = await fetch("https://api.retellai.com/token", {
+    const response = await fetch("https://api.retellai.com/v1/token", {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${api_key}`,
@@ -21,4 +21,5 @@ export default async function handler(req, res) {
     res.status(500).json({ error: err.message });
   }
 }
+
 
