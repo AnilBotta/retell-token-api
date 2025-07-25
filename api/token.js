@@ -1,8 +1,8 @@
 export default async function handler(req, res) {
-  const { agent_id, api_key } = req.query;
+  const { agent_id, api_key, customer_number } = req.query;
 
-  if (!agent_id || !api_key) {
-    return res.status(400).json({ error: "Missing agent_id or api_key" });
+  if (!agent_id || !api_key || !customer_number) {
+    return res.status(400).json({ error: "Missing agent_id, api_key, or customer_number" });
   }
 
   try {
@@ -10,13 +10,15 @@ export default async function handler(req, res) {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${api_key}`,
-        "Content-Type": "application/json",
+        "Content-Type": "application/json"
       },
-      body: JSON.stringify({ agent_id }),
+      body: JSON.stringify({
+        agent_id: agent_id,
+        customer_number: customer_number
+      })
     });
 
     const contentType = response.headers.get("content-type");
-    
     if (!contentType || !contentType.includes("application/json")) {
       const text = await response.text();
       throw new Error(`Unexpected response: ${text}`);
@@ -28,5 +30,6 @@ export default async function handler(req, res) {
     res.status(500).json({ error: err.message });
   }
 }
+
 
 
